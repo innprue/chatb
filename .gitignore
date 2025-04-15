@@ -12,3 +12,10 @@ out/
 *.log
 *.db
 *.sqlite
+
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
