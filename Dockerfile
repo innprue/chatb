@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 # Copiar el archivo .csproj y restaurar las dependencias
-COPY ["WhatsappNet.Api.csproj", "WhatsappNet.Api/"]
+COPY ["WhatsappNet.Api.csproj", "."]
 
 # Restaurar las dependencias
 RUN dotnet restore "WhatsappNet.Api.csproj"
