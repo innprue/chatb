@@ -12,13 +12,10 @@ namespace WhatsappNet.Api.Controllers
     {
         private readonly IWhatsappCloudSendMessage _whatsappCloudSendMessage;
         private readonly IUtil _util;
-        //private readonly IChatGPTService _chatGPTService;
         public WhatsappController(IWhatsappCloudSendMessage whatsappCloudSendMessage, IUtil util)
         {
-        //public WhatsappController(IWhatsappCloudSendMessage whatsappCloudSendMessage, IUtil util, IChatGPTService chatGPTService)
             _whatsappCloudSendMessage = whatsappCloudSendMessage;
             _util = util;
-            //_chatGPTService = chatGPTService;
         }
 
         [HttpGet("test")]
@@ -62,6 +59,8 @@ namespace WhatsappNet.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> ReceivedMessage([FromBody] WhatsAppCloudModel body)
         {
+               Console.WriteLine("userNumber, userText");
+
             try
             {
                 var Message = body.Entry[0]?.Changes[0]?.Value?.Messages[0];
@@ -69,7 +68,7 @@ namespace WhatsappNet.Api.Controllers
                 {
                     var userNumber = Message.From;
                     var userText = GetUserText(Message);
-
+                    Console.WriteLine(userNumber, userText);
 
                     object ObjectMessage;
                     switch (userText.ToUpper())
@@ -85,8 +84,7 @@ namespace WhatsappNet.Api.Controllers
                             ObjectMessage = _util.TextMessage("Hola, ¿no se entendio? 😃", userNumber);
                             break;
                     }
-                    //List<object> listObjectMessage = new List<object>();
-                    //List<object> listObjectMessage = new List<object>();
+
                     await _whatsappCloudSendMessage.Execute(ObjectMessage);
 
 
