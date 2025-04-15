@@ -1,11 +1,7 @@
 services:
   - type: web
-    name: whatsapp-net-api
-    runtime: dotnet
-    repo: https://github.com/innprue/chatbot
-    branch: main
-    buildCommand: dotnet publish WhatsappNet/WhatsappNet.Api/WhatsappNet.Api.csproj -c Release -o out
-    startCommand: dotnet out/WhatsappNet.Api.dll
-    envVars:
-      - key: ASPNETCORE_URLS
-        value: http://0.0.0.0:${PORT}
+    name: whatsappnet-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon  # Puedes elegir la región que prefieras
+    plan: free      # Usa el plan gratuito si es suficiente
