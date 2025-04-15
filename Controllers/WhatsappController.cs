@@ -80,8 +80,6 @@ namespace WhatsappNet.Api.Controllers
                             break;
                         case "IMAGE":
                             ObjectMessage = _util.ImageMessage("https://biostoragecloud.blob.core.windows.net/resource-udemy-whatsapp-node/image_whatsapp.png", userNumber);
-
-                            //ObjectMessage = _util.TextMessage("Hola, ¿cómo te puedo ayudar? 😃", userNumber);
                             break;
                         default:
                             ObjectMessage = _util.TextMessage("Hola, ¿no se entendio? 😃", userNumber);
