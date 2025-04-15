@@ -5,16 +5,16 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
 # Copiar el archivo .csproj y restaurar las dependencias
-COPY ["WhatsappNet.Api/WhatsappNet.Api.csproj", "WhatsappNet.Api/"]
+COPY ["WhatsappNet.Api.csproj", "WhatsappNet.Api/"]
 
 # Restaurar las dependencias
-RUN dotnet restore "WhatsappNet.Api/WhatsappNet.Api.csproj"
+RUN dotnet restore "WhatsappNet.Api.csproj"
 
 # Copiar el resto de los archivos
 COPY . .
 
 # Publicar la aplicación
-RUN dotnet publish "WhatsappNet.Api/WhatsappNet.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "WhatsappNet.Api.csproj" -c Release -o /app/publish
 
 # Usar la imagen de runtime para ejecutar la aplicación
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
