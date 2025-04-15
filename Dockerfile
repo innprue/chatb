@@ -1,5 +1,5 @@
-# Usar la imagen base de .NET SDK
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Usar la imagen base de .NET SDK 7.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 # Definir el directorio de trabajo
 WORKDIR /src
@@ -17,7 +17,7 @@ COPY . .
 RUN dotnet publish "WhatsappNet.Api.csproj" -c Release -o /app/publish
 
 # Usar la imagen de runtime para ejecutar la aplicación
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 
 WORKDIR /app
 COPY --from=build /app/publish .
