@@ -66,7 +66,9 @@ namespace WhatsappNet.Api.Controllers
 
                 if (Message != null)
                 {
-                    var userNumber = Message.From;
+                    var userNumber = CleanPhoneNumber(Message.From);  // Limpiar el número de teléfono
+
+                    //var userNumber = Message.From;
                     var userText = GetUserText(Message);
 
                     // Asegúrate de que se imprima correctamente el texto
@@ -123,6 +125,16 @@ namespace WhatsappNet.Api.Controllers
                 return Ok("EVENT_RECEIVED");
             }
         }
+        private string CleanPhoneNumber(string phoneNumber)
+        {
+            // Verifica que el número tenga más de 2 caracteres y que el tercer carácter sea '1'
+            if (phoneNumber.Length > 2 && phoneNumber[2] == '1')
+            {
+                // Elimina el '1' después de los dos primeros dígitos
+                return phoneNumber.Substring(0, 2) + phoneNumber.Substring(3);
+            }
+            return phoneNumber;
+        }
 
         private string GetUserText(Message message)
         {
@@ -159,5 +171,8 @@ namespace WhatsappNet.Api.Controllers
                 return string.Empty;  // Si el tipo de mensaje no es reconocido
             }
         }
+
+
+        
     }
 }
