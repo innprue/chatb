@@ -72,8 +72,19 @@ namespace WhatsappNet.Api.Controllers
                     // Asegúrate de que se imprima correctamente el texto
                     Console.WriteLine($"Mensaje de {userNumber}: {userText}");
 
-                    // Puedes usar 'Name' directamente, si está disponible
-                    var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name ?? "Desconocido";
+                    // Obtener el nombre del contacto, si es null o "_", asignar "Desconocido"
+                    var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name;
+
+                    // Si el contactName es igual a "_", asignar "Desconocido"
+                    if (contactName == "_")
+                    {
+                        contactName = "Desconocido";
+                    }
+                    // Si contactName es null, también asignar "Desconocido"
+                    else if (string.IsNullOrEmpty(contactName))
+                    {
+                        contactName = "Desconocido";
+                    }
                     Console.WriteLine($"Mensaje de {contactName} ({userNumber}): {userText}");
 
                     // Procesar el mensaje recibido
