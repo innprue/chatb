@@ -18,6 +18,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 // 👇 Esta línea es clave para Render
-app.Run("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+//app.Run("http://0.0.0.0:" + (Environment.GetEnvironmentVariable("PORT") ?? "5000"));
 
-//app.Run();
+app.Run();

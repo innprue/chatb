@@ -63,12 +63,17 @@ namespace WhatsappNet.Api.Controllers
 
             try
             {
+
+
                 var Message = body.Entry[0]?.Changes[0]?.Value?.Messages[0];
-                if(Message != null)
+               
+                if (Message != null)
                 {
                     var userNumber = Message.From;
                     var userText = GetUserText(Message);
                     Console.WriteLine(userNumber, userText);
+                    var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name;
+                    Console.WriteLine($"Mensaje de {contactName} ({userNumber}): {userText}");
 
                     object ObjectMessage;
                     switch (userText.ToUpper())
