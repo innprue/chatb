@@ -102,7 +102,16 @@ namespace WhatsappNet.Api.Controllers
                             break;
                     }
 
-                    await _whatsappCloudSendMessage.Execute(ObjectMessage);
+                    //await _whatsappCloudSendMessage.Execute(ObjectMessage);
+                    try
+                    {
+                        await _whatsappCloudSendMessage.Execute(ObjectMessage);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error al enviar mensaje: " + ex.Message);
+                    }
+
                 }
 
                 return Ok("EVENT_RECEIVED");
