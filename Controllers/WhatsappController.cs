@@ -55,51 +55,51 @@ namespace WhatsappNet.Api.Controllers
                 return BadRequest();
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> ReceivedMessage([FromBody] WhatsAppCloudModel body)
         {
-               Console.WriteLine("userNumber, userText");
+            Console.WriteLine("userNumber, userText");
 
             try
             {
+                var Message = body.Entry[0]?.Changes[0]?.Value?.Messages?[0];
 
-
-                var Message = body.Entry[0]?.Changes[0]?.Value?.Messages[0];
-               
                 if (Message != null)
                 {
                     var userNumber = Message.From;
                     var userText = GetUserText(Message);
-                    Console.WriteLine(userNumber, userText);
-                    var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name;
+
+                    // Asegúrate de que se imprima correctamente el texto
+                    Console.WriteLine($"Mensaje de {userNumber}: {userText}");
+
+                    // Puedes usar 'Name' directamente, si está disponible
+                    var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name ?? "Desconocido";
                     Console.WriteLine($"Mensaje de {contactName} ({userNumber}): {userText}");
 
+                    // Procesar el mensaje recibido
                     object ObjectMessage;
                     switch (userText.ToUpper())
                     {
                         case "TEXT":
                             ObjectMessage = _util.TextMessage("Hola, ¿cómo te puedo ayudar? 😃", userNumber);
-                          
                             break;
                         case "IMAGE":
                             ObjectMessage = _util.ImageMessage("https://biostoragecloud.blob.core.windows.net/resource-udemy-whatsapp-node/image_whatsapp.png", userNumber);
                             break;
                         default:
-                            ObjectMessage = _util.TextMessage("Hola, ¿no se entendio? 😃", userNumber);
+                            ObjectMessage = _util.TextMessage("Hola, ¿no se entendió? 😃", userNumber);
                             break;
                     }
 
                     await _whatsappCloudSendMessage.Execute(ObjectMessage);
-
-
                 }
-
 
                 return Ok("EVENT_RECEIVED");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                // Loggear el error para poder rastrear lo que sucedió
+                Console.WriteLine($"Error: {ex.Message}");
                 return Ok("EVENT_RECEIVED");
             }
         }
@@ -108,30 +108,35 @@ namespace WhatsappNet.Api.Controllers
         {
             string TypeMessage = message.Type;
 
-            if(TypeMessage.ToUpper() == "TEXT")
+            if (TypeMessage.ToUpper() == "TEXT")
             {
-                return message.Text.Body;
+                return message.Text?.Body ?? string.Empty;  // Asegúrate de que Body no sea nulo
             }
             else if (TypeMessage.ToUpper() == "INTERACTIVE")
             {
-                string interactiveType = message.Interactive.Type;
+                string interactiveType = message.Interactive?.Type;
 
-                if(interactiveType.ToUpper() == "LIST_REPLY")
+                if (interactiveType != null)
                 {
-                    return message.Interactive.List_Reply.Title;
+                    if (interactiveType.ToUpper() == "LIST_REPLY")
+                    {
+                        return message.Interactive.List_Reply?.Title ?? "Respuesta de lista no válida";
+                    }
+                    else if (interactiveType.ToUpper() == "BUTTON_REPLY")
+                    {
+                        return message.Interactive.Button_Reply?.Title ?? "Respuesta de botón no válida";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
                 }
-                else if (interactiveType.ToUpper() == "BUTTON_REPLY")
-                {
-                    return message.Interactive.Button_Reply.Title;
-                }
-                else
-                {
-                    return string.Empty;
-                }
+
+                return "Interactividad no válida";  // Si Interactive no está presente
             }
             else
             {
-                return string.Empty;
+                return string.Empty;  // Si el tipo de mensaje no es reconocido
             }
         }
     }
