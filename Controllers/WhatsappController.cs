@@ -66,30 +66,29 @@ namespace WhatsappNet.Api.Controllers
 
                 if (Message != null)
                 {
-                    var userNumber = CleanPhoneNumber(Message.From);  // Limpiar el número de teléfono
+                    var userNumber = CleanPhoneNumber(Message.From);  
 
-                    //var userNumber = Message.From;
                     var userText = GetUserText(Message);
 
-                    // Asegúrate de que se imprima correctamente el texto
+                 
                     Console.WriteLine($"Mensaje de {userNumber}: {userText}");
 
-                    // Obtener el nombre del contacto, si es null o "_", asignar "Desconocido"
+                    
                     var contactName = body.Entry[0]?.Changes[0]?.Value?.Contacts?[0]?.Profile?.Name;
 
-                    // Si el contactName es igual a "_", asignar "Desconocido"
+                    
                     if (contactName == "_")
                     {
                         contactName = "Desconocido";
                     }
-                    // Si contactName es null, también asignar "Desconocido"
+                    
                     else if (string.IsNullOrEmpty(contactName))
                     {
                         contactName = "Desconocido";
                     }
                     Console.WriteLine($"Mensaje de {contactName} ({userNumber}): {userText}");
 
-                    // Procesar el mensaje recibido
+                   
                     object ObjectMessage;
                     switch (userText.ToUpper())
                     {
@@ -104,7 +103,7 @@ namespace WhatsappNet.Api.Controllers
                             break;
                     }
 
-                    //await _whatsappCloudSendMessage.Execute(ObjectMessage);
+                    
                     try
                     {
                         await _whatsappCloudSendMessage.Execute(ObjectMessage);
@@ -120,17 +119,17 @@ namespace WhatsappNet.Api.Controllers
             }
             catch (Exception ex)
             {
-                // Loggear el error para poder rastrear lo que sucedió
+               
                 Console.WriteLine($"Error: {ex.Message}");
                 return Ok("EVENT_RECEIVED");
             }
         }
         private string CleanPhoneNumber(string phoneNumber)
         {
-            // Verifica que el número tenga más de 2 caracteres y que el tercer carácter sea '1'
+            
             if (phoneNumber.Length > 2 && phoneNumber[2] == '1')
             {
-                // Elimina el '1' después de los dos primeros dígitos
+              
                 return phoneNumber.Substring(0, 2) + phoneNumber.Substring(3);
             }
             return phoneNumber;
@@ -142,7 +141,7 @@ namespace WhatsappNet.Api.Controllers
 
             if (TypeMessage.ToUpper() == "TEXT")
             {
-                return message.Text?.Body ?? string.Empty;  // Asegúrate de que Body no sea nulo
+                return message.Text?.Body ?? string.Empty;  
             }
             else if (TypeMessage.ToUpper() == "INTERACTIVE")
             {
@@ -164,11 +163,11 @@ namespace WhatsappNet.Api.Controllers
                     }
                 }
 
-                return "Interactividad no válida";  // Si Interactive no está presente
+                return "Interactividad no válida";  
             }
             else
             {
-                return string.Empty;  // Si el tipo de mensaje no es reconocido
+                return string.Empty;  
             }
         }
 

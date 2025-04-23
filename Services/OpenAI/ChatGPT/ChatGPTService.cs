@@ -23,11 +23,11 @@ namespace WhatsappNet.Api.Services.OpenAI.ChatGPT
                 if (result != null && result.Completions.Count > 0)
                     return result.Completions[0].Text;
 
-                return "Lo siento, sucedió un problema, inténtalo más tarde.";
+                return "Lo siento, sucediï¿½ un problema, intï¿½ntalo mï¿½s tarde.";
             }
             catch (Exception e)
             {
-                return "Lo siento, sucedió un problema, inténtalo más tarde.";
+                return "Lo siento, sucediï¿½ un problema, intï¿½ntalo mï¿½s tarde.";
             }
         }
     }
